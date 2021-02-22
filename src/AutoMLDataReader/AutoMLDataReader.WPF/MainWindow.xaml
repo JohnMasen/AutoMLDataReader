@@ -7,33 +7,67 @@
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="AutoMLDataReader.WPF.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" DataContext="{Binding MainView, Mode=OneWay, Source={StaticResource ViewModelLocator}}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="43*"/>
-            <RowDefinition Height="102*"/>
-            <RowDefinition Height="290*"/>
+            <RowDefinition Height="139*"/>
+            <RowDefinition Height="274*"/>
+            <RowDefinition Height="21.04"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="31*"/>
-            <ColumnDefinition Width="49*"/>
-        </Grid.ColumnDefinitions>
-        <Button Content="RefershSwagger" HorizontalAlignment="Left" Margin="24,10,0,0" VerticalAlignment="Top" Height="72" Width="132" Grid.Column="1" Grid.Row="1" >
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Click">
-                    <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="RefreshSwagger"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-        </Button>
-        <ListBox ItemsSource="{Binding SwaggerResultItems}" Margin="0,43,0,0" Grid.RowSpan="3"/>
-        <TextBox Text="{Binding SwaggerUrl, Mode=TwoWay, UpdateSourceTrigger=Default}" TextWrapping="Wrap" VerticalAlignment="Top"/>
-        <Button Content="GO" Grid.Column="1" HorizontalAlignment="Left" Margin="245,8,0,0" Grid.Row="1" VerticalAlignment="Top" Height="77" Width="94">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Click">
-                    <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="Load"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-        </Button>
-        <DataGrid Grid.Column="1" Grid.Row="2" DataContext="{Binding ResultTable, Mode=OneWay}" ItemsSource="{Binding Mode=OneWay}"/>
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="121*"/>
+                <ColumnDefinition Width="132*"/>
+                <ColumnDefinition Width="547*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="197*"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid DataContext="{Binding ResultTable, Mode=OneWay}" ItemsSource="{Binding Mode=OneWay}" Grid.RowSpan="2" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" IsReadOnly="True"/>
+
+            <Button Content="GO" IsEnabled="{Binding IsNotBusy, Mode=OneWay}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="Load"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Button>
+            <Slider x:Name="slider" Grid.Column="2" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" Maximum="500" Minimum="10" SmallChange="10" LargeChange="50" TickPlacement="BottomRight" Value="{Binding BatchSize, Mode=TwoWay, UpdateSourceTrigger=Default}" TickFrequency="10"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding Value, ElementName=slider, Mode=OneWay, StringFormat=BatchSize \{0\}}" Margin="59,0,0,0"/>
+            <Button Content="Export CSV" Grid.Row="1">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="Click">
+                        <b:CallMethodAction MethodName="ExportToCSV" TargetObject="{Binding Mode=OneWay}"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </Button>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="157*"/>
+                <ColumnDefinition Width="643*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button x:Name="btnBrowse" Content="Browse CSV" Click="btnBrowse_Click"/>
+            <TextBlock Text="{Binding CSVPath}" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" Text="{Binding EndpointUrl, Mode=TwoWay, UpdateSourceTrigger=Default}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="Endpoint Url" TextWrapping="Wrap" VerticalAlignment="Center"/>
+        </Grid>
+        <StatusBar VerticalAlignment="Stretch" Grid.Row="2">
+            <StatusBarItem VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Content="{Binding StatusText}" Width="100"/>
+            <StatusBarItem HorizontalContentAlignment="Stretch">
+                <ProgressBar Height="15" Maximum="1" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" Value="{Binding LoadProgress}"/>
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </Window>

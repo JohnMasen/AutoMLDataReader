@@ -1,4 +1,6 @@
 ﻿using AutoMLDataReader.Core;
+using AutoMLDataReader.WPF.ViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +23,21 @@ namespace AutoMLDataReader.WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowVM model => this.DataContext as MainWindowVM;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        
+        private void btnBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "CSV File|*.CSV";
+            ofd.Multiselect = false;
+            if (ofd.ShowDialog()==true)
+            {
+                model.CSVPath = ofd.FileName;
+            }
+        }
     }
 }
