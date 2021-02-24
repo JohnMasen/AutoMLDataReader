@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 namespace AutoMLDataReader.WPF.ViewModel
 {
@@ -60,6 +61,7 @@ namespace AutoMLDataReader.WPF.ViewModel
                 OnPropertyChanged(propertyName:nameof(IsNotBusy)); 
             }
         }
+        
 
         public string APIKey { get; set; } = null;
 
@@ -127,17 +129,32 @@ namespace AutoMLDataReader.WPF.ViewModel
             IsBusy = true;
             StatusText = string.Empty;
             DataLoader loader = new DataLoader();
-            ResultTable = await loader.LoadData(
-                @"D:\Temp\dwd_sellin_invoice_daily_for_poc\Predict_KAP2_RegionSKU_Month_Raw.csv",
-                "http://b28960d0-58a2-41ad-93c8-fa756b0e3307.chinaeast2.azurecontainer.console.azure.cn/score",
-                "JhHUoZP5twdDrQoepqRRL3BLkdORw7cy",
+            LoadProgress = 0;
+            try
+            {
+                ResultTable = await loader.LoadData(
+                CSVPath,
+                EndpointUrl,
+                APIKey,
                 BatchSize,
-                new DelegateProcess<float>(x=>
+                new DelegateProcess<float>(x =>
                 {
                     LoadProgress = x;
                 }));
-            StatusText = $"{ResultTable.Rows.Count} rows loaded";
-            IsBusy = false;
+                StatusText = $"{ResultTable.Rows.Count} rows loaded";
+            }
+            catch (Exception ex)
+            {
+                StatusText = string.Empty;
+                MessageBox.Show($"failed load data \n\r {ex}", "Fail", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+            
+            
+            
         }
 
         public void ExportToCSV()

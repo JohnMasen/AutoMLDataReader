@@ -12,8 +12,8 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="139*"/>
-            <RowDefinition Height="274*"/>
+            <RowDefinition Height="139"/>
+            <RowDefinition/>
             <RowDefinition Height="21.04"/>
         </Grid.RowDefinitions>
         <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1">
@@ -23,9 +23,9 @@
                 <ColumnDefinition Width="547*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="38*"/>
-                <RowDefinition Height="38*"/>
-                <RowDefinition Height="197*"/>
+                <RowDefinition Height="38.139"/>
+                <RowDefinition Height="37.978"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
             <DataGrid DataContext="{Binding ResultTable, Mode=OneWay}" ItemsSource="{Binding Mode=OneWay}" Grid.RowSpan="2" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1" IsReadOnly="True"/>
@@ -57,10 +57,13 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button x:Name="btnBrowse" Content="Browse CSV" Click="btnBrowse_Click"/>
-            <TextBlock Text="{Binding CSVPath}" TextWrapping="Wrap" VerticalAlignment="Stretch"/>
+            <Button x:Name="btnBrowse" Content="..." Click="btnBrowse_Click" Grid.Column="1" Width="30" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding CSVPath}" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,30,0"/>
             <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" Text="{Binding EndpointUrl, Mode=TwoWay, UpdateSourceTrigger=Default}" TextWrapping="Wrap" VerticalAlignment="Center"/>
             <TextBlock HorizontalAlignment="Center" Grid.Row="1" Text="Endpoint Url" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBox Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="2" Text="{Binding APIKey, Mode=TwoWay, UpdateSourceTrigger=Default}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center" Grid.Row="2" Text="API Key" TextWrapping="Wrap" VerticalAlignment="Center"/>
+            <TextBlock HorizontalAlignment="Center" Text="CSV Path" TextWrapping="Wrap" VerticalAlignment="Center"/>
         </Grid>
         <StatusBar VerticalAlignment="Stretch" Grid.Row="2">
             <StatusBarItem VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Content="{Binding StatusText}" Width="100"/>
