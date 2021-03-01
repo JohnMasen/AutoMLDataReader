@@ -4,10 +4,10 @@ using System.Text;
 
 namespace AutoMLDataReader.WPF
 {
-    public class DelegateProcess<T> : IProgress<T>
+    public class DelegateProgress<T> : IProgress<T>
     {
         private Action<T> a;
-        public DelegateProcess(Action<T> report)
+        public DelegateProgress(Action<T> report)
         {
             a = report;
         }

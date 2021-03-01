@@ -137,7 +137,7 @@ namespace AutoMLDataReader.WPF.ViewModel
                 EndpointUrl,
                 APIKey,
                 BatchSize,
-                new DelegateProcess<float>(x =>
+                new DelegateProgress<float>(x =>
                 {
                     LoadProgress = x;
                 }));
